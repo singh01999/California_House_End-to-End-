@@ -2,6 +2,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, app, jsonify
+
  
 
 app = Flask(__name__)
@@ -25,6 +26,17 @@ def predict_api():    ## Creating predict_api for our app
     output = model.predict(new_data)
     print(output[0])
     return jsonify(output[0])
+
+
+
+## To create a html form
+@app.route("/predict", methods = ['POST'])
+def predict():
+    data = [float(x) for x in request.form.values()]
+    final_input = scalar.transform(np.array(data).reshape(1, -1))
+    print(final_input)
+    output = model.predict(final_input)[0]
+    return render_template("home.html", prediction_text ="house price predictionis {}".format(output))
 
 ## To run this 
 
